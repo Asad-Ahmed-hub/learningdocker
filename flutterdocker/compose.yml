@@ -1,0 +1,12 @@
+services:
+  flutter:
+    build:
+      context: ./flutterapp
+      dockerfile: Dockerfile
+    ports:
+      - "5038:5037"  # Map a different host port to ADB port in Docker
+    volumes:
+      - ./flutterapp:/app       # Maps the local flutterapp directory to /app in the container
+      - /app/build               # Persist build artifacts locally
+    stdin_open: true
+    tty: true

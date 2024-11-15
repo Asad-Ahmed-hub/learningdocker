@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress
+    ports:
+      - "8000:80"
+    environment:
+      WORDPRESS_DB_HOST: wordpress_db:3306
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: Wordpress786! # Password for database
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - ./wordpress:/var/www/html # Map WordPress files
+    depends_on:
+      - wordpress_db
+
+  wordpress_db:
+    image: mariadb:latest
+    container_name: wordpress_db
+    environment:
+      MYSQL_ROOT_PASSWORD: Wordpress786! # Root password for MariaDB
+      MYSQL_DATABASE: wordpress # Default database for WordPress
+      MYSQL_USER: root # Database user
+      MYSQL_PASSWORD: Wordpress786! # Password for root user
+    volumes:
+      - ./db_data:/var/lib/mysql # Map MariaDB data
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: wordpress_db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: Wordpress786! # Password for root access in PHPMyAdmin
+    depends_on:
+      - wordpress_db
+
+volumes:
+  wordpress:
+  db_data:
